@@ -1,0 +1,35 @@
+services:
+  app:
+    container_name: app
+    build: .
+    command: python manage.py runserver 0.0.0.0:8001
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    environment:
+      - DB_HOST=db
+      - DB_NAME=categories
+      - DB_USER=test
+      - DB_PASSWORD=test
+    stdin_open: true
+    tty: true
+
+  db:
+    image: mariadb:12.0
+    container_name: db
+    restart: always
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysqlroot
+      - MYSQL_PASSWORD=test
+      - MYSQL_USER=test
+      - MYSQL_DATABASE=categories
+    ports:
+      - "3306:3306"
+
+volumes:
+  mariadb_data:
