@@ -14,10 +14,16 @@ class Command(BaseCommand):
             name="Tech", description="All things tech"
         )
         computers, _ = Category.objects.update_or_create(name="Computers", parent=tech)
-        _laptops, _ = Category.objects.update_or_create(name="Laptops", parent=computers)
-        _desktops, _ = Category.objects.update_or_create(name="Desktops", parent=computers)
+        _laptops, _ = Category.objects.update_or_create(
+            name="Laptops", parent=computers
+        )
+        _desktops, _ = Category.objects.update_or_create(
+            name="Desktops", parent=computers
+        )
         audio, _ = Category.objects.update_or_create(name="Audio", parent=tech)
-        headphones, _ = Category.objects.update_or_create(name="Headphones", parent=audio)
+        headphones, _ = Category.objects.update_or_create(
+            name="Headphones", parent=audio
+        )
         wireless_headphones, _ = Category.objects.update_or_create(
             name="Wireless headphones", parent=headphones
         )
@@ -35,7 +41,9 @@ class Command(BaseCommand):
         vegetables, _ = Category.objects.update_or_create(
             name="Vegetables", parent=fresh_produce
         )
-        potatoes, _ = Category.objects.update_or_create(name="Potatoes", parent=vegetables)
+        potatoes, _ = Category.objects.update_or_create(
+            name="Potatoes", parent=vegetables
+        )
         _sweet_potatoes, _ = Category.objects.update_or_create(
             name="Sweet potatoes", parent=potatoes
         )
