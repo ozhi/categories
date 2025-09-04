@@ -9,12 +9,15 @@ class Category(models.Model):
     # Parent is the direct ancestor category.
     # on_delete=models.RESTRICT prevents deleting a category if it has children.
     parent = models.ForeignKey(
-        "Category",
+        to="Category",
         on_delete=models.RESTRICT,
         null=True,
         blank=True,
         related_name="children",
     )
+
+    def __str__(self) -> str:
+        return f"Category {self.id} ({self.name})"
 
     class Meta:
         verbose_name_plural = "categories"

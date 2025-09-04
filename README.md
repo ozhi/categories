@@ -22,6 +22,11 @@ docker-compose exec app python manage.py createsuperuser
 ```
 For testing purposes, username=`root`, password=`root` is fine.
 
+5. Seed db wth sample data
+```bash
+docker-compose exec app python manage.py seed
+```
+
 ### Development
 
 1. Build migration files
