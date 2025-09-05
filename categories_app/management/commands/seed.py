@@ -7,47 +7,101 @@ class Command(BaseCommand):
     help = "Seeds the db with sample data for testing or development."
 
     def add_arguments(self, parser):
-        pass  # parser.add_argument("category_count", nargs="+", type=int)
+        pass
 
     def handle(self, *args, **options):
         tech, _ = Category.objects.update_or_create(
-            name="Tech", description="All things tech"
+            name="Tech",
+            defaults={
+                "description": "All things tech",
+                "parent": None,
+            },
         )
-        computers, _ = Category.objects.update_or_create(name="Computers", parent=tech)
+        computers, _ = Category.objects.update_or_create(
+            name="Computers",
+            defaults={
+                "parent": tech,
+            },
+        )
         _laptops, _ = Category.objects.update_or_create(
-            name="Laptops", parent=computers
+            name="Laptops",
+            defaults={
+                "parent": computers,
+            },
         )
         _desktops, _ = Category.objects.update_or_create(
-            name="Desktops", parent=computers
+            name="Desktops",
+            defaults={
+                "parent": computers,
+            },
         )
-        audio, _ = Category.objects.update_or_create(name="Audio", parent=tech)
+        audio, _ = Category.objects.update_or_create(
+            name="Audio",
+            defaults={
+                "parent": tech,
+            },
+        )
         headphones, _ = Category.objects.update_or_create(
-            name="Headphones", parent=audio
+            name="Headphones",
+            defaults={
+                "parent": audio,
+            },
         )
         wireless_headphones, _ = Category.objects.update_or_create(
-            name="Wireless headphones", parent=headphones
+            name="Wireless headphones",
+            defaults={
+                "parent": headphones,
+            },
         )
         _, _ = Category.objects.update_or_create(
-            name="In-ear wireless headphones", parent=wireless_headphones
+            name="In-ear wireless headphones",
+            defaults={
+                "parent": wireless_headphones,
+            },
         )
         _, _ = Category.objects.update_or_create(
-            name="Over-ear wireless headphones", parent=wireless_headphones
+            name="Over-ear wireless headphones",
+            defaults={
+                "parent": wireless_headphones,
+            },
         )
 
-        food, _ = Category.objects.update_or_create(name="Food")
+        food, _ = Category.objects.update_or_create(
+            name="Food",
+            defaults={
+                "parent": None,
+            },
+        )
         fresh_produce, _ = Category.objects.update_or_create(
-            name="Fresh produce", parent=food
+            name="Fresh produce",
+            defaults={
+                "parent": food,
+            },
         )
         vegetables, _ = Category.objects.update_or_create(
-            name="Vegetables", parent=fresh_produce
+            name="Vegetables",
+            defaults={
+                "parent": fresh_produce,
+            },
         )
         potatoes, _ = Category.objects.update_or_create(
-            name="Potatoes", parent=vegetables
+            name="Potatoes",
+            defaults={
+                "parent": vegetables,
+            },
         )
         _sweet_potatoes, _ = Category.objects.update_or_create(
-            name="Sweet potatoes", parent=potatoes
+            name="Sweet potatoes",
+            defaults={
+                "parent": potatoes,
+            },
         )
 
-        _books, _ = Category.objects.update_or_create(name="Books")
+        _books, _ = Category.objects.update_or_create(
+            name="Books",
+            defaults={
+                "parent": None,
+            },
+        )
 
         self.stdout.write(self.style.SUCCESS("DB seeded successfully"))
