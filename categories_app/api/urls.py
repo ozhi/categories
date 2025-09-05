@@ -1,15 +1,9 @@
-from django.urls import path
 from django.urls.resolvers import URLPattern
+from rest_framework.routers import DefaultRouter
 
-from categories_app.api.views.category_list import CategoryListView
-from categories_app.api.views.category_retrieve import CategoryRetrieveView
+from categories_app.api.views.category_viewset import CategoryViewSet
 
 
-urlpatterns: list[URLPattern] = [
-    path("categories/", CategoryListView.as_view(), name="api_category_list"),
-    path(
-        "categories/<int:pk>/",
-        CategoryRetrieveView.as_view(),
-        name="api_category_retrieve",
-    ),
-]
+router = DefaultRouter()
+router.register(r"categories", CategoryViewSet, basename="category")
+urlpatterns: list[URLPattern] = router.urls
