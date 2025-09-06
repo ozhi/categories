@@ -96,6 +96,7 @@ class CategoryDestroyMixin:
     """
 
     @transaction.atomic
+    # TODO: Consider using transactions per HTTP request for simplicity at the cost of a bit of performance.
     def destroy(self, request, pk=None):
         category = get_object_or_404(self.queryset, pk=pk)
 
