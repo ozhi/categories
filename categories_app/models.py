@@ -19,6 +19,12 @@ class Category(models.Model):
         related_name="children",
     )
 
+    # A category can be similar to multiple other categories.
+    # Symmetry - automatically reflected in the db by Django, A~B implies B~A.
+    # Transitiveness - not enforced, if A~B and B~C, A~C may or may not be true.
+    # Reflexiveness - forbidden, we can not have A~A.
+    similar_to = models.ManyToManyField(to="self", symmetrical=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

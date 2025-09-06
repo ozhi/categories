@@ -4,3 +4,4 @@ sqlparse==0.5.3
 mysqlclient==2.2.0
 pillow==11.3.0
 djangorestframework>=3.16
+drf-nested-routers==0.94

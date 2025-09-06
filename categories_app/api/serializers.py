@@ -3,6 +3,8 @@ from categories_app.models import Category
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    similar_to = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
     class Meta:
         model = Category
         fields = [
@@ -10,11 +12,13 @@ class CategorySerializer(serializers.ModelSerializer):
             "name",
             "description",
             "parent",
+            "similar_to",
             "created_at",
             "updated_at",
         ]
         read_only_fields = [
             "id",
+            "similar_to",
             "created_at",
             "updated_at",
         ]
@@ -51,3 +55,7 @@ class CategorySerializer(serializers.ModelSerializer):
                 return True
             current = current.parent
         return False
+
+
+class CategorySimilarityAddSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
