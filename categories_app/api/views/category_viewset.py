@@ -1,5 +1,6 @@
 from typing import Iterable
 from django.db import transaction
+from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.exceptions import ValidationError
@@ -20,8 +21,8 @@ class CategoryListMixin:
 
     def list(self, request):
         self._parse_query_params()
-        queryset = self._get_queryset()
-        serializer = CategorySerializer(queryset, many=True)
+        queryset = self._filter_queryset(self.queryset)
+        serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
     def _parse_query_params(self):
@@ -57,7 +58,7 @@ class CategoryListMixin:
                     "query param max_depth must be a nonnegative integers"
                 )
 
-    def _get_queryset(self) -> Iterable[Category]:
+    def _filter_queryset(self, queryset: QuerySet[Category]) -> Iterable[Category]:
         queryset = Category.objects.all()
 
         if self.qparam_name:
@@ -149,10 +150,20 @@ class CategoryListMixin:
 
 class CategoryRetrieveMixin:
     def retrieve(self, request, pk=None):
-        queryset = Category.objects.all()
-        category = get_object_or_404(queryset, pk=pk)
-        serializer = CategorySerializer(category)
+        category = get_object_or_404(self.queryset, pk=pk)
+        serializer = self.serializer_class(category)
         return Response(serializer.data)
+
+
+class CategoryCreateMixin:
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            category = serializer.save()
+            return Response(
+                self.serializer_class(category).data, status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CategoryDestroyMixin:
@@ -162,8 +173,7 @@ class CategoryDestroyMixin:
 
     @transaction.atomic
     def destroy(self, request, pk=None):
-        queryset = Category.objects.all()
-        category = get_object_or_404(queryset, pk=pk)
+        category = get_object_or_404(self.queryset, pk=pk)
 
         Category.objects.filter(parent=category).update(parent=category.parent)
         category.delete()
@@ -173,10 +183,9 @@ class CategoryDestroyMixin:
 
 class CategoryUpdateMixin:
     def update(self, request, pk=None, partial=False):
-        queryset = Category.objects.all()
-        category = get_object_or_404(queryset, pk=pk)
+        category = get_object_or_404(self.queryset, pk=pk)
 
-        serializer = CategorySerializer(category, data=request.data, partial=partial)
+        serializer = self.serializer_class(category, data=request.data, partial=partial)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -190,8 +199,10 @@ class CategoryUpdateMixin:
 class CategoryViewSet(
     CategoryListMixin,
     CategoryRetrieveMixin,
+    CategoryCreateMixin,
     CategoryDestroyMixin,
     CategoryUpdateMixin,
     viewsets.ViewSet,
 ):
-    pass
+    serializer_class = CategorySerializer
+    queryset: QuerySet[Category] = Category.objects.all()
