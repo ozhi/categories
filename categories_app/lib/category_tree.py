@@ -11,7 +11,6 @@ class CategoryTree:
     """
 
     def __init__(self, all_categories: Iterable[Category]):
-        self.ancestors: dict[int, int] = {}
         self.depths: dict[int, int] = {}
         self.categories: dict[int, Category] = {
             category.id: category for category in all_categories

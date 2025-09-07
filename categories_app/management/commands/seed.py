@@ -23,13 +23,13 @@ class Command(BaseCommand):
                 "parent": tech,
             },
         )
-        _laptops, _ = Category.objects.update_or_create(
+        laptops, _ = Category.objects.update_or_create(
             name="Laptops",
             defaults={
                 "parent": computers,
             },
         )
-        _desktops, _ = Category.objects.update_or_create(
+        desktops, _ = Category.objects.update_or_create(
             name="Desktops",
             defaults={
                 "parent": computers,
@@ -90,18 +90,24 @@ class Command(BaseCommand):
                 "parent": vegetables,
             },
         )
-        _sweet_potatoes, _ = Category.objects.update_or_create(
+        sweet_potatoes, _ = Category.objects.update_or_create(
             name="Sweet potatoes",
             defaults={
                 "parent": potatoes,
             },
         )
 
-        _books, _ = Category.objects.update_or_create(
+        books, _ = Category.objects.update_or_create(
             name="Books",
             defaults={
                 "parent": None,
             },
         )
+
+        # Similarities.
+        computers.similar_to.add(laptops, desktops)
+        laptops.similar_to.add(desktops)
+        books.similar_to.add(computers)
+        potatoes.similar_to.add(sweet_potatoes)
 
         self.stdout.write(self.style.SUCCESS("DB seeded successfully"))
