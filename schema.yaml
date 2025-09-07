@@ -1,0 +1,348 @@
+openapi: 3.0.3
+info:
+  title: Categories API
+  version: 1.0.0
+  description: API of the Categories app
+paths:
+  /api/categories/:
+    get:
+      operationId: categories_list
+      description: |-
+        Filterable by query params:
+            - name (case insensitive, partial match)
+            - ancestor_id (only categories that are descendants of the category with this id)
+            - max_depth (limits how deep the descendants can be)
+                - when used with ancestor_id, it is considered depth=0
+                - when used without ancestor_id, top-level categories are considered depth=0
+
+        Pagination (with default settings) comes our of the box.
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+          description: ''
+    post:
+      operationId: categories_create
+      description: |-
+        Filterable by query params:
+            - name (case insensitive, partial match)
+            - ancestor_id (only categories that are descendants of the category with this id)
+            - max_depth (limits how deep the descendants can be)
+                - when used with ancestor_id, it is considered depth=0
+                - when used without ancestor_id, top-level categories are considered depth=0
+
+        Pagination (with default settings) comes our of the box.
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/categories/{category_pk}/similarities/:
+    get:
+      operationId: categories_similarities_retrieve
+      description: Handles /categories/{category_pk}/similarities/
+      parameters:
+      - in: path
+        name: category_pk
+        schema:
+          type: string
+        required: true
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: categories_similarities_create
+      description: Handles /categories/{category_pk}/similarities/
+      parameters:
+      - in: path
+        name: category_pk
+        schema:
+          type: string
+        required: true
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          description: No response body
+  /api/categories/{category_pk}/similarities/{id}/:
+    delete:
+      operationId: categories_similarities_destroy
+      description: Handles /categories/{category_pk}/similarities/
+      parameters:
+      - in: path
+        name: category_pk
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/categories/{id}/:
+    get:
+      operationId: categories_retrieve
+      description: |-
+        Filterable by query params:
+            - name (case insensitive, partial match)
+            - ancestor_id (only categories that are descendants of the category with this id)
+            - max_depth (limits how deep the descendants can be)
+                - when used with ancestor_id, it is considered depth=0
+                - when used without ancestor_id, top-level categories are considered depth=0
+
+        Pagination (with default settings) comes our of the box.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    put:
+      operationId: categories_update
+      description: |-
+        Filterable by query params:
+            - name (case insensitive, partial match)
+            - ancestor_id (only categories that are descendants of the category with this id)
+            - max_depth (limits how deep the descendants can be)
+                - when used with ancestor_id, it is considered depth=0
+                - when used without ancestor_id, top-level categories are considered depth=0
+
+        Pagination (with default settings) comes our of the box.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    patch:
+      operationId: categories_partial_update
+      description: |-
+        Filterable by query params:
+            - name (case insensitive, partial match)
+            - ancestor_id (only categories that are descendants of the category with this id)
+            - max_depth (limits how deep the descendants can be)
+                - when used with ancestor_id, it is considered depth=0
+                - when used without ancestor_id, top-level categories are considered depth=0
+
+        Pagination (with default settings) comes our of the box.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    delete:
+      operationId: categories_destroy
+      description: |-
+        Filterable by query params:
+            - name (case insensitive, partial match)
+            - ancestor_id (only categories that are descendants of the category with this id)
+            - max_depth (limits how deep the descendants can be)
+                - when used with ancestor_id, it is considered depth=0
+                - when used without ancestor_id, top-level categories are considered depth=0
+
+        Pagination (with default settings) comes our of the box.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        description:
+          type: string
+          nullable: true
+          maxLength: 300
+        parent:
+          type: integer
+          nullable: true
+        similar_to:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - similar_to
+      - updated_at
+    PatchedCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        description:
+          type: string
+          nullable: true
+          maxLength: 300
+        parent:
+          type: integer
+          nullable: true
+        similar_to:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

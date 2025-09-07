@@ -27,8 +27,10 @@ For testing purposes, username=`root`, password=`root` is fine.
 docker-compose exec app python manage.py seed
 ```
 
-6. Explore API at `localhost:8001/api`.
-Open it in the browser to use the Django Rest Framework UI.
+6. Explore API.
+- Open [localhost:8001/api](localhost:8001/api) in the browser for Django Rest Framework UI.
+- Open [localhost:8001/api/docs/swagger/](localhost:8001/api/docs/swagger/) for Swagger UI.
+- Open [localhost:8001/api/docs/redoc/](localhost:8001/api/docs/swagger/) for Redoc UI.
 
 7. View string visualization of the Category tree.
 ```bash
@@ -53,4 +55,9 @@ docker-compose exec app python manage.py makemigrations
 ```bash
 docker-compose run --rm app ruff check .
 docker-compose run --rm app ruff format .
+```
+
+3. Update OpenAPI docs (after API updates)
+```bash
+docker-compose exec app python manage.py spectacular --file schema.yaml
 ```

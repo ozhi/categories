@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "categories_app",
     "rest_framework",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -104,6 +105,20 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Categories API",
+    "DESCRIPTION": "API of the Categories app",
+    "VERSION": "1.0.0",
+    # Other useful options:
+    "SERVE_INCLUDE_SCHEMA": False,   # hide schema from public docs
+    "SCHEMA_PATH_PREFIX": r"/api",  # optional filter for endpoints
+}
 
 
 # Internationalization
