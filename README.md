@@ -27,9 +27,24 @@ For testing purposes, username=`root`, password=`root` is fine.
 docker-compose exec app python manage.py seed
 ```
 
+6. Explore API at `localhost:8001/api`.
+Open it in the browser to use the Django Rest Framework UI.
+
+7. View string visualization of the Category tree.
+```bash
+docker-compose exec app python manage.py tree_as_string
+```
+
+8. Generate image of the Category tree with color-coded similarity
+```bash
+docker-compose exec app python manage.py tree_as_image
+```
+Open `./tree.png`
+
+
 ### Development
 
-1. Build migration files
+1. Build migration files (after model updates)
 ```bash
 docker-compose exec app python manage.py makemigrations
 ```

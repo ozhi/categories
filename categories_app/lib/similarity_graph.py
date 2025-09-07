@@ -1,5 +1,4 @@
 from collections import deque
-from typing import Iterable
 
 from django.db.models import Prefetch
 
@@ -14,16 +13,16 @@ class SimilarityGraph:
     V (Vertices, categories) = 2*10^3
     E (Edges, similarities) = 2*10^5
     Unweighted graph, so we don't need Dijkstra or Floyd-Warshall algorithm.
-    
+
     BFS = O(E+V) = 2*10^5
     longest_rabbit_hole (repeated BFS) = O(V*(E+V)) = 4 *10^8
-    
+
     DFS = O(V+E) = 2*10^5
     rabbit_islands (repeated DFS, but each vertex visited once) = 2*10^5
     """
 
-    def __init__(self, all_categories: Iterable[Category]):
-        # TODO make sure similarities are prefetched.
+    def __init__(self):
+        # Prefetch similars for each category. This results in just 2 db queries.
         all_categories = Category.objects.prefetch_related(
             Prefetch("similar_to", queryset=Category.objects.only("id"))
         ).all()

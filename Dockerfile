@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     default-libmysqlclient-dev \
     pkg-config \
     build-essential \
+    graphviz \
     && rm -rf /var/lib/apt/lists/*
 
 # Install pip dependencies

@@ -5,3 +5,4 @@ mysqlclient==2.2.0
 pillow==11.3.0
 djangorestframework>=3.16
 drf-nested-routers==0.94
+anytree==2.13.0
