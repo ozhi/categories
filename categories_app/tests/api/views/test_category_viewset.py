@@ -88,6 +88,28 @@ class TestCategoryViewSetList:
         for name in expected_category_names:
             assert name in returned_category_names
 
+    def test_order_by_name(self, categories):
+        response = self.client.get(
+            f"/api/categories/?order_by=name",
+        )
+        assert response.status_code == 200
+
+        returned_category_names = [cat["name"] for cat in response.data]
+        assert ["Audio", "Books", "Computers"] == returned_category_names[:3]
+
+    def test_order_by_name_reversed(self, categories):
+        response = self.client.get(
+            f"/api/categories/?order_by=-name",
+        )
+        assert response.status_code == 200
+
+        returned_category_names = [cat["name"] for cat in response.data]
+        assert [
+            "Wireless headphones",
+            "Vegetables",
+            "Tech",
+        ] == returned_category_names[:3]
+
 
 @pytest.mark.django_db
 class TestCategoryViewSet:

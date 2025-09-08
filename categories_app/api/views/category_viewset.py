@@ -20,8 +20,13 @@ class CategoryListMixin:
             - when used with ancestor_id, it is considered depth=0
             - when used without ancestor_id, top-level categories are considered depth=0
 
+    Orderable by name, parent, created_at, updated_at, e.g. ?order_by=name.
+    Reverse ordering e.g. ?order_by=-name.
+
     Pagination (with default settings) comes our of the box.
     """
+
+    _orderable_fields: set[str] = {"name", "parent", "created_at", "updated_at"}
 
     def list(self, request):
         self._parse_query_params()
@@ -33,6 +38,7 @@ class CategoryListMixin:
         self.qparam_name: str | None = None
         self.qparam_ancestor_id: int | None = None
         self.qparam_max_depth: int | None = None
+        self.qparam_order_by: str | None = None
 
         self.qparam_name = self.request.query_params.get("name")
 
@@ -56,8 +62,17 @@ class CategoryListMixin:
             if self.qparam_max_depth < 0:
                 raise ValidationError(err_msg)
 
+        self.qparam_order_by = self.request.query_params.get("order_by")
+        if self.qparam_order_by:
+            field_name = self.qparam_order_by.lstrip("-")
+            if field_name not in self._orderable_fields:
+                raise ValidationError(f"Invalid order_by field: {field_name}")
+
     def _filter_queryset(self, queryset: QuerySet[Category]) -> Iterable[Category]:
         queryset = Category.objects.all()
+
+        if self.qparam_order_by:
+            queryset = queryset.order_by(self.qparam_order_by)
 
         if self.qparam_name:
             queryset = queryset.filter(name__icontains=self.qparam_name)
@@ -116,6 +131,7 @@ class CategoryUpdateMixin:
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class CategoryViewSet(
     CategoryListMixin,
