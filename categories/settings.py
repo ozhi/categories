@@ -116,7 +116,7 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "API of the Categories app",
     "VERSION": "1.0.0",
     # Other useful options:
-    "SERVE_INCLUDE_SCHEMA": False,   # hide schema from public docs
+    "SERVE_INCLUDE_SCHEMA": False,  # hide schema from public docs
     "SCHEMA_PATH_PREFIX": r"/api",  # optional filter for endpoints
 }
 

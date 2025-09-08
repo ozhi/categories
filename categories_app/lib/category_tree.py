@@ -65,7 +65,7 @@ class CategoryTree:
         if category_id == ancestor_id:
             return True
 
-        return self._has_ancestor(
+        return self._category_has_ancestor(
             self.categories[category_id].parent_id,
             ancestor_id,
             max_depth - 1 if max_depth is not None else None,

@@ -9,6 +9,7 @@ services:
       - db
     volumes:
       - .:/app
+    working_dir: /app
     environment:
       - DB_HOST=db
       - DB_NAME=categories

@@ -107,19 +107,15 @@ class CategoryDestroyMixin:
 
 
 class CategoryUpdateMixin:
-    def update(self, request, pk=None, partial=False):
+    def partial_update(self, request, pk=None):
         category = get_object_or_404(self.queryset, pk=pk)
 
-        serializer = self.serializer_class(category, data=request.data, partial=partial)
+        serializer = self.serializer_class(category, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def partial_update(self, request, pk=None):
-        return self.update(request, pk, partial=True)
-
 
 class CategoryViewSet(
     CategoryListMixin,

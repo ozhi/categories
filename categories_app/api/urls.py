@@ -28,4 +28,6 @@ apidocs_urlpatterns = [
     path("docs/redoc/", SpectacularRedocView.as_view(url_name="schema")),
 ]
 
-urlpatterns: list[URLPattern] = router.urls + categories_router.urls + apidocs_urlpatterns
+urlpatterns: list[URLPattern] = (
+    router.urls + categories_router.urls + apidocs_urlpatterns
+)

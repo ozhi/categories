@@ -24,7 +24,7 @@ For testing purposes, username=`root`, password=`root` is fine.
 
 5. Seed db wth sample data
 ```bash
-docker-compose exec app python manage.py seed
+docker-compose exec app python manage.py db_seed
 ```
 
 6. Explore API.
@@ -50,6 +50,19 @@ Open `./tree.png`
 ```bash
 docker-compose exec app python manage.py makemigrations
 ```
+
+2. Run tests
+    * The first time, log into the db as `root`:`mysqlroot` and execute
+    ```sql
+    CREATE DATABASE test_categories;
+    GRANT ALL PRIVILEGES ON test_categories.* TO 'test'@'%';
+    FLUSH PRIVILEGES;
+    ```
+
+    * Then run tests:
+    ```bash
+    docker-compose exec app pytest
+    ```
 
 2. Lint
 ```bash
