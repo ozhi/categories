@@ -88,6 +88,15 @@ DATABASES = {
 }
 
 
+CACHES = {
+    "default": {
+        # Using LocMemCache for simplicity.
+        # TODO: consider MemCached, Redis, etc. for production.
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-snowflake",
+    }
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 

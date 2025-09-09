@@ -1,4 +1,6 @@
-from typing import Iterable
+from datetime import timedelta
+from typing import Final, Iterable
+from django.core.cache import cache
 from django.db import transaction
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
@@ -9,6 +11,11 @@ from rest_framework.response import Response
 from categories_app.models import Category
 from categories_app.api.serializers import CategorySerializer
 from categories_app.lib.category_tree import CategoryTree
+
+# The category tree is cached and reused for list requests.
+# It is evicted from the cache on create/update/delete of categories.
+_CACHE_KEY_CATEGORY_TREE: Final[str] = "category_tree"
+_CACHE_TIMEOUT_CATEGORY_TREE: Final[int] = timedelta(minutes=5).seconds
 
 
 class CategoryListMixin:
@@ -77,7 +84,7 @@ class CategoryListMixin:
         if self.qparam_name:
             queryset = queryset.filter(name__icontains=self.qparam_name)
 
-        category_tree = CategoryTree(list(Category.objects.all()))
+        category_tree = self._get_category_tree()
         queryset = category_tree.filter(
             queryset=queryset,
             ancestor_id=self.qparam_ancestor_id,
@@ -85,6 +92,18 @@ class CategoryListMixin:
         )
 
         return queryset
+
+    def _get_category_tree(self) -> CategoryTree:
+        category_tree: CategoryTree = cache.get(_CACHE_KEY_CATEGORY_TREE)
+        if not category_tree:
+            category_tree = CategoryTree()
+            cache.set(
+                _CACHE_KEY_CATEGORY_TREE,
+                category_tree,
+                timeout=_CACHE_TIMEOUT_CATEGORY_TREE,
+            )
+
+        return category_tree
 
 
 class CategoryRetrieveMixin:
@@ -99,6 +118,7 @@ class CategoryCreateMixin:
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             category = serializer.save()
+            cache.delete(_CACHE_KEY_CATEGORY_TREE)
             return Response(
                 self.serializer_class(category).data, status=status.HTTP_201_CREATED
             )
@@ -117,6 +137,7 @@ class CategoryDestroyMixin:
 
         Category.objects.filter(parent=category).update(parent=category.parent)
         category.delete()
+        cache.delete(_CACHE_KEY_CATEGORY_TREE)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -128,6 +149,7 @@ class CategoryUpdateMixin:
         serializer = self.serializer_class(category, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            cache.delete(_CACHE_KEY_CATEGORY_TREE)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

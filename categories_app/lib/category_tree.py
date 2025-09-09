@@ -10,7 +10,9 @@ class CategoryTree:
     Should be initialized with all Categories for complete depth evaluation.
     """
 
-    def __init__(self, all_categories: Iterable[Category]):
+    def __init__(self) -> None:
+        all_categories = Category.objects.all()
+
         self.depths: dict[int, int] = {}
         self.categories: dict[int, Category] = {
             category.id: category for category in all_categories
