@@ -7,7 +7,6 @@ class CategoryTree:
     """
     Represents the set of Categories when regarded as a tree of parent/child relationships.
     Filtering is done here as python is better suited for such recursive relationships than SQL.
-    Should be initialized with all Categories for complete depth evaluation.
     """
 
     def __init__(self) -> None:

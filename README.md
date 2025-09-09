@@ -27,17 +27,27 @@ For testing purposes, username=`root`, password=`root` is fine.
 docker-compose exec app python manage.py db_seed
 ```
 
-6. Explore API.
+6. Compute longest rabbit hole
+```bash
+docker-compose exec app python manage.py longest_rabbit_hole
+```
+
+7. Compute rabbit islands
+```bash
+docker-compose exec app python manage.py rabbit_islands
+```
+
+8. Explore API.
 - Open [localhost:8001/api](localhost:8001/api) in the browser for Django Rest Framework UI.
 - Open [localhost:8001/api/docs/swagger/](localhost:8001/api/docs/swagger/) for Swagger UI.
-- Open [localhost:8001/api/docs/redoc/](localhost:8001/api/docs/swagger/) for Redoc UI.
+- Open [localhost:8001/api/docs/redoc/](localhost:8001/api/docs/redoc/) for Redoc UI.
 
-7. View string visualization of the Category tree.
+9. View string visualization of the Category tree.
 ```bash
 docker-compose exec app python manage.py tree_as_string
 ```
 
-8. Generate image of the Category tree with color-coded similarity
+10. Generate image of the Category tree with color-coded similarity
 ```bash
 docker-compose exec app python manage.py tree_as_image
 ```
