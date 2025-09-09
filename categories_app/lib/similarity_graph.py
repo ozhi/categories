@@ -22,7 +22,8 @@ class SimilarityGraph:
     """
 
     def __init__(self):
-        # Prefetch similars for each category. This results in just 2 db queries.
+        # Prefetch similars for each category to avoid N+1 problem.
+        # This results in just 2 db queries.
         all_categories = Category.objects.prefetch_related(
             Prefetch("similar_to", queryset=Category.objects.only("id"))
         ).all()
